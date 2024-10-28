@@ -36,6 +36,7 @@ func runStartCommand() {
 	http.HandleFunc(MonitorsRoutePath, getAllMonitorsHandler)
 	http.HandleFunc(MonitorBaseRoutePath, getMonitorStatsHandler)
 	http.HandleFunc(MonitorClickRouterPath, updateMonitorClickCountHandler)
+	http.Handle("/", http.FileServer(http.Dir("./public")))
 
 	fmt.Println("The server is running at port " + port)
 	if err := http.ListenAndServe(port, nil); err != nil {

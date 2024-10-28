@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop.net</title>
+    <style>
+        ul {
+            width: max-content;
+        }
+
+        li {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Monitor List</h1>
+        <ul id="monitor-list"></ul>
+    </div>
+    <script>
+        const monitorList = document.getElementById('monitor-list');
+
+        getAllMonitors();
+
+        async function getAllMonitors() {
+            const response = await fetch(getRequestURL('monitors'));
+            const data = await response.json();
+            const monitorsMap = Object.fromEntries(data.monitors.map(it => [it[0], { name: it[1], count: 0 }]));
+            await Promise.all(
+                data.monitors.map(async ([id]) => {
+                    const response = await fetch(getRequestURL(`monitor/${id}`));
+                    const data = await response.json();
+                    monitorsMap[id].count = data.count;
+                })
+            );
+            renderMonitors(monitorsMap);
+        }
+
+        function renderMonitors(monitorsMap) {
+            monitorList.addEventListener("click", async (event) => {
+                if (event.target instanceof HTMLLIElement) {
+                    const monitorId = event.target.getAttribute('data-id');
+
+                    await fetch(getRequestURL(`monitor_click/${monitorId}`), {
+                        method: "POST"
+                    });
+                    const response = await fetch(getRequestURL(`monitor/${monitorId}`));
+                    const data = await response.json();
+
+                    monitorsMap[monitorId].count = data.count;
+                    event.target.textContent = formatItemLabel(monitorsMap[monitorId]);
+                }
+            })
+
+            Array.from(Object.keys(monitorsMap)).forEach(id => {
+                const li = document.createElement('li');
+                li.textContent = formatItemLabel(monitorsMap[id]);
+                li.setAttribute('data-id', id);
+                monitorList.appendChild(li);
+            });
+        }
+
+        function formatItemLabel(monitor) {
+            return `${monitor.name} (Click count: ${monitor.count})`;
+        }
+
+        function getRequestURL(path) {
+            return `/api/category/${path}`;
+        }
+    </script>
+</body>
+
+</html>
