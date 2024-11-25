@@ -12,7 +12,7 @@ sudo mkdir -p /opt/monitor_api
 sudo mv ./build/monitor_api /opt/monitor_api/monitor_api
 
 sudo cp -r ./public /opt/monitor_api
-sudo cp ./data/monitors.txt /opt/monitor_api
+sudo cp -r ./data /opt/monitor_api
 
 sudo cp ./config/monitor_api.sh /opt/monitor_api/monitor_api.sh
 sudo chmod +x /opt/monitor_api/monitor_api.sh

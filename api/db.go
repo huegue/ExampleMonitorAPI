@@ -16,7 +16,7 @@ func createDBConnector() func() *sql.DB {
 
     return func() *sql.DB {
         if DB == nil || DB.Ping() != nil {
-            db, err := sql.Open("sqlite3", "products.db")
+            db, err := sql.Open("sqlite3", "./data/products.db")
             if err != nil {
                 log.Fatal("Failed to open the database:", err)
             }

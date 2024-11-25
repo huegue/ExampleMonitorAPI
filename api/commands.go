@@ -13,19 +13,19 @@ func runHelpCommand() {
 }
 
 func runCreateDBCommand() {
-	if _, err := os.Stat("./monitors.txt"); os.IsNotExist(err) {
+	if _, err := os.Stat("./data/monitors.txt"); os.IsNotExist(err) {
 		log.Println("ERROR! File \"monitors.txt\" does not exist!")
 		return
 	}
 
-	if _, err := os.Stat("./products.db"); err == nil {
-		if os.Remove("./products.db") != nil {
+	if _, err := os.Stat("./data/products.db"); err == nil {
+		if os.Remove("./data/products.db") != nil {
 			log.Println(err)
 			return
 		}
 	}
 
-	setupDatabaseAndImportMonitors("./monitors.txt")
+	setupDatabaseAndImportMonitors("./data/monitors.txt")
 	fmt.Println("OK. File products.db is created!")
 }
 
