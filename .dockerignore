@@ -1,0 +1,12 @@
+*
+
+!go.mod
+!go.sum
+!api
+!public
+!data
+!docker_entrypoint.sh
+
+
+
+
